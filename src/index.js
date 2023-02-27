@@ -2,19 +2,15 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const db = require("./db");
+const routeCategories = require("./categories/categories");
+//middleware. Pois envio e recebo via body e o json é a forma de caixa que envia
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Essa é aplicação walletApp");
 });
 
-app.get("/categories", (req, res) => {
-  db.query("SELECT * FROM categories", (error, response) => {
-    if (error) {
-      return res.status(500).json(error);
-    }
-    return res.status(200).json(response.rows);
-  });
-});
+app.use("/categories", routeCategories); //melhor dividir cada código em uma pasta para ficar mais organizado
 
 app.listen(port, () => {
   db.connect()

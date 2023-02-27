@@ -6,5 +6,6 @@ const db = new Pool({
   host: "localhost",
   port: 5432,
 });
-
+// comunicação estabelecida com o banco de dados.
+// e se for por outro host da empresa?
 module.exports = db;
