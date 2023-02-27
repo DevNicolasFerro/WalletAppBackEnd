@@ -1,0 +1,14 @@
+{
+  "name": "wallet-app",
+  "version": "1.0.0",
+  "description": "wallet finances API with nodejs and pg",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "NicolasFerro",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
