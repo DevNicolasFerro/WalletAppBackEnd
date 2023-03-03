@@ -93,15 +93,64 @@ router.delete("/:id", async (req, res) => {
     const deleteResponse = await db.query(text, values);
 
     // se ocorrer um erro na deleção
-    if (!category.rows[0]) {
+    if (!deleteResponse.rows[0]) {
       return res.status(400).json({ error: "category not deleted" });
     }
 
     // Se o ID for encontrado, será deletado o conteúdo, por isso '.rows'
-    return res.status(200).json(deleteResponse.rows);
+    return res.status(200).json(deleteResponse.rows[0]);
   } catch (error) {
     return res.status(500).json(error); // posso colocar um console.log no lugar do json.
     // dessa forma, consigo ver pelo terminal onde está o erro. '.json(console.log(error))
+  }
+});
+
+///###PUT atualização de dados
+
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // desconstrução da requisição http
+    const { name } = req.body;
+
+    //validação para se for feita uma requisição sem o id
+    if (!id) {
+      return res.status(400).json({ error: "param id is mandatory" });
+    }
+
+    // validação do banco de dados, devido as constraints
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+    if (name.length < 3) {
+      return res.status(400).json({ error: "must have more than 3 charactrs" });
+    }
+
+    //Encontrar o ID, Caso seja passado um ID
+    const query = findOne(id);
+
+    // O id foi passado, agora deve-se verificar se existe no db.
+    // É um função assincrona, pois devemos esperar a resposta do db
+
+    const category = await db.query(query);
+
+    //Se não existir a categoria que foi fornecida
+    if (!category.rows[0]) {
+      return res.status(404).json({ error: "category not found" });
+    }
+
+    //Script de Update
+    const text = "UPDATE categories SET name=$1 WHERE id=$2 RETURNING* ";
+    const values = [name, Number(id)];
+
+    const updateResponse = await db.query(text, values);
+
+    // se ocorrer um erro na deleção
+    if (!updateResponse.rows[0]) {
+      return res.status(400).json({ error: "category not updated" });
+    }
+
+    // Se o ID for encontrado, será deletado o conteúdo, por isso '.rows'
+    return res.status(200).json(updateResponse.rows[0]);
+  } catch (error) {
+    return res.status(500).json(error);
   }
 });
 
