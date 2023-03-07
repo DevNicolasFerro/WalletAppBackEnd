@@ -1,8 +1,8 @@
 // bloco de texto reutilizavel, boa prática de programação
 const findEmail = {
-  findByUser: (email, query) => {
+  findUser: (email) => {
     return {
-      name: query,
+      name: "fetch-user",
       text: "SELECT * FROM users WHERE email= $1",
       values: [email],
     };
