@@ -4,14 +4,9 @@ const router = express.Router();
 const db = require("../db");
 
 // função para encontrar dados, Será utilizada mais de uma vez.
+const queriesID = require("../queries/categories");
 
-const findOne = (id) => {
-  return {
-    name: "fetch-category",
-    text: "SELECT * FROM categories WHERE id=$1",
-    values: [Number(id)],
-  };
-};
+// função para encontrar dados, Será utilizada mais de uma vez.
 
 // ### ROUTER GET
 router.get("/", (req, res) => {
@@ -75,7 +70,7 @@ router.delete("/:id", async (req, res) => {
     }
 
     //Encontrar o ID, Caso seja passado um ID
-    const query = findOne(id);
+    const query = queriesID.findOne(id);
 
     // O id foi passado, agora deve-se verificar se existe no db.
     // É um função assincrona, pois devemos esperar a resposta do db
@@ -124,7 +119,7 @@ router.put("/:id", async (req, res) => {
     }
 
     //Encontrar o ID, Caso seja passado um ID
-    const query = findOne(id);
+    const query = queriesID.findOne(id);
 
     // O id foi passado, agora deve-se verificar se existe no db.
     // É um função assincrona, pois devemos esperar a resposta do db
